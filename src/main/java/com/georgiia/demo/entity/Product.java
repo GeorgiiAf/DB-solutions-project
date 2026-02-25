@@ -1,5 +1,6 @@
 package com.georgiia.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -16,8 +17,13 @@ public class Product {
 
     private Double price;
 
+    @Column(name = "stock_quantity")
     private Integer stockQuantity;
 
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    @JsonBackReference
+    private ProductCategory category;
     public Product() {
     }
 
@@ -43,4 +49,7 @@ public class Product {
 
     public Integer getStockQuantity() { return stockQuantity; }
     public void setStockQuantity(Integer stockQuantity) { this.stockQuantity = stockQuantity; }
+
+    public ProductCategory getCategory() { return category; }
+    public void setCategory(ProductCategory category) { this.category = category; }
 }
