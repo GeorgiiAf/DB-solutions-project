@@ -27,6 +27,16 @@ public class Product {
     public Product() {
     }
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "supplier_id")
+    @JsonBackReference
+    private Supplier supplier;
+
+
+
+
+
+
     public Product(String name, String description, Double price, Integer stockQuantity) {
         this.name = name;
         this.description = description;
@@ -52,4 +62,10 @@ public class Product {
 
     public ProductCategory getCategory() { return category; }
     public void setCategory(ProductCategory category) { this.category = category; }
+
+
+    public Supplier getSupplier() { return supplier; }
+    public void setSupplier(Supplier supplier) { this.supplier = supplier; }
+
+
 }

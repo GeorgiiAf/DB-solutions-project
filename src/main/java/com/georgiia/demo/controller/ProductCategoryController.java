@@ -1,4 +1,4 @@
-package com.georgiia.demo.conrtoller;
+package com.georgiia.demo.controller;
 
 import com.georgiia.demo.entity.ProductCategory;
 import com.georgiia.demo.repository.ProductCategoryRepository;
