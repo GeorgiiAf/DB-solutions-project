@@ -1,4 +1,5 @@
 package com.georgiia.demo.entity;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -20,6 +21,9 @@ public class Customer {
     @Column(name = "phone")
     private String customersPhone;
 
+    @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private CustomerAddress address;
 
     public Customer() {
     }
@@ -44,8 +48,9 @@ public class Customer {
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
 
-
     public String getCustomersPhone() { return customersPhone; }
     public void setCustomersPhone(String customersPhone) { this.customersPhone = customersPhone; }
 
+    public CustomerAddress getAddress() { return address; }
+    public void setAddress(CustomerAddress address) { this.address = address; }
 }

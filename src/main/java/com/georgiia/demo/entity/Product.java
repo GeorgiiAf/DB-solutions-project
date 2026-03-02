@@ -2,6 +2,7 @@ package com.georgiia.demo.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "products")
@@ -12,30 +13,27 @@ public class Product {
     private Long id;
 
     private String name;
-
     private String description;
-
     private Double price;
 
     @Column(name = "stock_quantity")
     private Integer stockQuantity;
 
+    // 1:M связь с категорией оставляем
     @ManyToOne
     @JoinColumn(name = "category_id")
     @JsonBackReference
     private ProductCategory category;
-    public Product() {
-    }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "supplier_id")
-    @JsonBackReference
-    private Supplier supplier;
+    @ManyToMany
+    @JoinTable(
+            name = "product_supplier",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "supplier_id")
+    )
+    private List<Supplier> suppliers;
 
-
-
-
-
+    public Product() {}
 
     public Product(String name, String description, Double price, Integer stockQuantity) {
         this.name = name;
@@ -43,7 +41,8 @@ public class Product {
         this.price = price;
         this.stockQuantity = stockQuantity;
     }
-    // getters ja setters
+
+    // ===== GETTERS / SETTERS =====
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -63,9 +62,6 @@ public class Product {
     public ProductCategory getCategory() { return category; }
     public void setCategory(ProductCategory category) { this.category = category; }
 
-
-    public Supplier getSupplier() { return supplier; }
-    public void setSupplier(Supplier supplier) { this.supplier = supplier; }
-
-
+    public List<Supplier> getSuppliers() { return suppliers; }
+    public void setSuppliers(List<Supplier> suppliers) { this.suppliers = suppliers; }
 }

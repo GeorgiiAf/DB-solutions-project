@@ -1,6 +1,5 @@
 package com.georgiia.demo.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.util.List;
 
@@ -16,8 +15,7 @@ public class Supplier {
     private String email;
     private String phone;
 
-    @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference
+    @ManyToMany(mappedBy = "suppliers")
     private List<Product> products;
 
     public Supplier() {}
