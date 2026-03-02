@@ -1,9 +1,5 @@
 package com.georgiia.demo.entity;
-
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-
-
 
 @Entity
 @DiscriminatorValue("COMPANY")
@@ -21,7 +17,6 @@ public class CompanyCustomer extends Customer {
         this.vatNumber = vatNumber;
     }
 
-    // геттеры и сеттеры
     public String getCompanyName() { return companyName; }
     public void setCompanyName(String companyName) { this.companyName = companyName; }
 

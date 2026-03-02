@@ -19,7 +19,6 @@ public class Product {
     @Column(name = "stock_quantity")
     private Integer stockQuantity;
 
-    // 1:M связь с категорией оставляем
     @ManyToOne
     @JoinColumn(name = "category_id")
     @JsonBackReference
@@ -41,8 +40,6 @@ public class Product {
         this.price = price;
         this.stockQuantity = stockQuantity;
     }
-
-    // ===== GETTERS / SETTERS =====
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }

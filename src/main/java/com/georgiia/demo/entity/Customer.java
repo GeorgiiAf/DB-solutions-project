@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "customers")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "customer_type", discriminatorType = DiscriminatorType.STRING)
+@DiscriminatorValue("PERSON")
 public class Customer {
 
     @Id
