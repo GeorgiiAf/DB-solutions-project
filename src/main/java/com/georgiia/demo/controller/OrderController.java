@@ -1,7 +1,7 @@
 package com.georgiia.demo.controller;
 
-import com.georgiia.demo.entity.Order;
-import com.georgiia.demo.repository.OrderRepository;
+import com.georgiia.demo.dto.OrderDTO;
+import com.georgiia.demo.service.OrderService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,23 +10,29 @@ import java.util.List;
 @RequestMapping("/orders")
 public class OrderController {
 
-    private final OrderRepository repo;
+    private final OrderService orderService;
 
-    public OrderController(OrderRepository repo) { this.repo = repo; }
+    public OrderController(OrderService orderService) {
+        this.orderService = orderService;
+    }
 
     @GetMapping
-    public List<Order> getAll() { return repo.findAll(); }
+    public List<OrderDTO> getAll() {
+        return orderService.getAllOrders();
+    }
 
     @GetMapping("/{id}")
-    public Order getById(@PathVariable Long id) {
-        return repo.findById(id).orElseThrow(() -> new RuntimeException("Order not found"));
+    public OrderDTO getById(@PathVariable Long id) {
+        return orderService.getOrderById(id);
     }
 
     @PostMapping
-    public Order create(@RequestBody Order order) {
-        return repo.save(order);
+    public OrderDTO create(@RequestBody OrderDTO order) {
+        return orderService.createOrder(order);
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) { repo.deleteById(id); }
+    public void delete(@PathVariable Long id) {
+        orderService.deleteOrder(id);
+    }
 }

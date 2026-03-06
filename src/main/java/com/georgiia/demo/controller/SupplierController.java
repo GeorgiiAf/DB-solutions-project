@@ -1,7 +1,7 @@
 package com.georgiia.demo.controller;
 
-import com.georgiia.demo.entity.Supplier;
-import com.georgiia.demo.repository.SupplierRepository;
+import com.georgiia.demo.dto.SupplierDTO;
+import com.georgiia.demo.service.SupplierService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,33 +10,34 @@ import java.util.List;
 @RequestMapping("/suppliers")
 public class SupplierController {
 
-    private final SupplierRepository repo;
+    private final SupplierService supplierService;
 
-    public SupplierController(SupplierRepository repo) { this.repo = repo; }
+    public SupplierController(SupplierService supplierService) {
+        this.supplierService = supplierService;
+    }
 
     @GetMapping
-    public List<Supplier> getAll() { return repo.findAll(); }
+    public List<SupplierDTO> getAll() {
+        return supplierService.getAllSuppliers();
+    }
 
     @GetMapping("/{id}")
-    public Supplier getById(@PathVariable Long id) {
-        return repo.findById(id).orElseThrow(() -> new RuntimeException("Supplier not found"));
+    public SupplierDTO getById(@PathVariable Long id) {
+        return supplierService.getSupplierById(id);
     }
 
     @PostMapping
-    public Supplier create(@RequestBody Supplier supplier) {
-        return repo.save(supplier);
+    public SupplierDTO create(@RequestBody SupplierDTO supplier) {
+        return supplierService.createSupplier(supplier);
     }
 
     @PutMapping("/{id}")
-    public Supplier update(@PathVariable Long id, @RequestBody Supplier supplier) {
-        Supplier existing = repo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Supplier not found"));
-        existing.setName(supplier.getName());
-        existing.setEmail(supplier.getEmail());
-        existing.setPhone(supplier.getPhone());
-        return repo.save(existing);
+    public SupplierDTO update(@PathVariable Long id, @RequestBody SupplierDTO supplier) {
+        return supplierService.updateSupplier(id, supplier);
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) { repo.deleteById(id); }
+    public void delete(@PathVariable Long id) {
+        supplierService.deleteSupplier(id);
+    }
 }

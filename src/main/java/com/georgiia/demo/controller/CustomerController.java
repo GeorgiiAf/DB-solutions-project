@@ -1,8 +1,8 @@
 package com.georgiia.demo.controller;
 
-import com.georgiia.demo.entity.Customer;
+import com.georgiia.demo.dto.CustomerDTO;
 import com.georgiia.demo.entity.CompanyCustomer;
-import com.georgiia.demo.repository.CustomerRepository;
+import com.georgiia.demo.service.CustomerService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,50 +11,39 @@ import java.util.List;
 @RequestMapping("/customers")
 public class CustomerController {
 
-    private final CustomerRepository repo;
+    private final CustomerService customerService;
 
-    public CustomerController(CustomerRepository repo) {
-        this.repo = repo;
+    public CustomerController(CustomerService customerService) {
+        this.customerService = customerService;
     }
 
     @GetMapping
-    public List<Customer> getAll() {
-        return repo.findAll();
+    public List<CustomerDTO> getAll() {
+        return customerService.getAllCustomers();
     }
 
     @GetMapping("/{id}")
-    public Customer getById(@PathVariable Long id) {
-        return repo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Customer not found with id " + id));
+    public CustomerDTO getById(@PathVariable Long id) {
+        return customerService.getCustomerById(id);
     }
 
     @PostMapping
-    public Customer create(@RequestBody Customer customer) {
-        return repo.save(customer);
+    public CustomerDTO create(@RequestBody CustomerDTO customer) {
+        return customerService.createCustomer(customer);
     }
 
     @PostMapping("/company")
-    public Customer createCompanyCustomer(@RequestBody CompanyCustomer companyCustomer) {
-        return repo.save(companyCustomer);
+    public CustomerDTO createCompanyCustomer(@RequestBody CompanyCustomer companyCustomer) {
+        return customerService.createCompanyCustomer(companyCustomer);
     }
 
     @PutMapping("/{id}")
-    public Customer update(@PathVariable Long id, @RequestBody Customer customer) {
-        Customer existing = repo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Customer not found with id " + id));
-
-        existing.setFirstName(customer.getFirstName());
-        existing.setLastName(customer.getLastName());
-        existing.setEmail(customer.getEmail());
-        existing.setCustomersPhone(customer.getCustomersPhone());
-        return repo.save(existing);
+    public CustomerDTO update(@PathVariable Long id, @RequestBody CustomerDTO customer) {
+        return customerService.updateCustomer(id, customer);
     }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
-        repo.deleteById(id);
+        customerService.deleteCustomer(id);
     }
-
-
-
 }

@@ -1,7 +1,7 @@
 package com.georgiia.demo.controller;
 
-import com.georgiia.demo.entity.Product;
-import com.georgiia.demo.repository.ProductRepository;
+import com.georgiia.demo.dto.ProductDTO;
+import com.georgiia.demo.service.ProductService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,47 +10,34 @@ import java.util.List;
 @RequestMapping("/products")
 public class ProductController {
 
-    private final ProductRepository repo;
+    private final ProductService productService;
 
-    public ProductController(ProductRepository repo) {
-        this.repo = repo;
+    public ProductController(ProductService productService) {
+        this.productService = productService;
     }
 
-    // GET /products
     @GetMapping
-    public List<Product> getAll() {
-        return repo.findAll();
+    public List<ProductDTO> getAll() {
+        return productService.getAllProducts();
     }
 
-    // GET /products/{id}
     @GetMapping("/{id}")
-    public Product getById(@PathVariable Long id) {
-        return repo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found with id " + id));
+    public ProductDTO getById(@PathVariable Long id) {
+        return productService.getProductById(id);
     }
 
-    // POST /products
     @PostMapping
-    public Product create(@RequestBody Product product) {
-        return repo.save(product);
+    public ProductDTO create(@RequestBody ProductDTO product) {
+        return productService.createProduct(product);
     }
 
-    // PUT /products/{id}
     @PutMapping("/{id}")
-    public Product update(@PathVariable Long id, @RequestBody Product product) {
-        Product existing = repo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found with id " + id));
-
-        existing.setName(product.getName());
-        existing.setDescription(product.getDescription());
-        existing.setPrice(product.getPrice());
-        existing.setStockQuantity(product.getStockQuantity());
-        return repo.save(existing);
+    public ProductDTO update(@PathVariable Long id, @RequestBody ProductDTO product) {
+        return productService.updateProduct(id, product);
     }
 
-    // DELETE /products/{id}
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
-        repo.deleteById(id);
+        productService.deleteProduct(id);
     }
 }

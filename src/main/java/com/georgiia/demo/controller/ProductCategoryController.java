@@ -1,7 +1,7 @@
 package com.georgiia.demo.controller;
 
-import com.georgiia.demo.entity.ProductCategory;
-import com.georgiia.demo.repository.ProductCategoryRepository;
+import com.georgiia.demo.dto.ProductCategoryDTO;
+import com.georgiia.demo.service.ProductCategoryService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,43 +10,34 @@ import java.util.List;
 @RequestMapping("/categories")
 public class ProductCategoryController {
 
-    private final ProductCategoryRepository repo;
+    private final ProductCategoryService categoryService;
 
-    public ProductCategoryController(ProductCategoryRepository repo) {
-        this.repo = repo;
+    public ProductCategoryController(ProductCategoryService categoryService) {
+        this.categoryService = categoryService;
     }
 
     @GetMapping
-    public List<ProductCategory> getAll() {
-        return repo.findAll();
+    public List<ProductCategoryDTO> getAll() {
+        return categoryService.getAllCategories();
     }
 
     @GetMapping("/{id}")
-    public ProductCategory getById(@PathVariable Long id) {
-        return repo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Category not found"));
+    public ProductCategoryDTO getById(@PathVariable Long id) {
+        return categoryService.getCategoryById(id);
     }
 
     @PostMapping
-    public ProductCategory create(@RequestBody ProductCategory category) {
-        return repo.save(category);
+    public ProductCategoryDTO create(@RequestBody ProductCategoryDTO category) {
+        return categoryService.createCategory(category);
     }
 
     @PutMapping("/{id}")
-    public ProductCategory update(@PathVariable Long id,
-                                  @RequestBody ProductCategory category) {
-
-        ProductCategory existing = repo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Category not found"));
-
-        existing.setName(category.getName());
-        existing.setDescription(category.getDescription());
-
-        return repo.save(existing);
+    public ProductCategoryDTO update(@PathVariable Long id, @RequestBody ProductCategoryDTO category) {
+        return categoryService.updateCategory(id, category);
     }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
-        repo.deleteById(id);
+        categoryService.deleteCategory(id);
     }
 }
